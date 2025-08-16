@@ -104,12 +104,17 @@ export const useNewsNotifications = () => {
     }
   };
 
+  const clearNotificationCount = () => {
+    setUnreadCount(0);
+  };
+
   return {
     unreadCount,
     recentNews,
     loading,
     error,
     markAsRead,
-    markAllAsRead
+    markAllAsRead,
+    clearNotificationCount
   };
 };

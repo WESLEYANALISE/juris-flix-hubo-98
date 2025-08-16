@@ -13,19 +13,19 @@ interface NewsNotificationDropdownProps {
 }
 
 export const NewsNotificationDropdown = ({ isOpen, onClose }: NewsNotificationDropdownProps) => {
-  const { recentNews, loading, markAsRead, markAllAsRead } = useNewsNotifications();
+  const { recentNews, loading, markAsRead, markAllAsRead, clearNotificationCount } = useNewsNotifications();
   const { setCurrentFunction } = useNavigation();
 
-  // Marcar todas como lidas quando abrir o dropdown
+  // Zerar contador quando abrir o dropdown
   React.useEffect(() => {
-    if (isOpen && recentNews.length > 0) {
-      markAllAsRead();
+    if (isOpen) {
+      clearNotificationCount();
     }
-  }, [isOpen, recentNews.length, markAllAsRead]);
+  }, [isOpen, clearNotificationCount]);
 
   const handleNewsClick = (newsId: number) => {
     markAsRead(newsId);
-    setCurrentFunction('NoticiasJuridicas');
+    setCurrentFunction('Noticias  Comentadas');
     onClose();
   };
 
@@ -153,7 +153,7 @@ export const NewsNotificationDropdown = ({ isOpen, onClose }: NewsNotificationDr
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    setCurrentFunction('NoticiasJuridicas');
+                    setCurrentFunction('Noticias  Comentadas');
                     onClose();
                   }}
                   className="w-full"
