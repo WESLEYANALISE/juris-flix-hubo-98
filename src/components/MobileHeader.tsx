@@ -14,7 +14,7 @@ export const MobileHeader = ({
   setSidebarOpen
 }: MobileHeaderProps) => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const { unreadCount } = useNewsNotifications();
+  const { unreadCount, clearNotificationCount } = useNewsNotifications();
   return <>
       <header className="fixed top-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/20 safe-area-pt">
         <div className="px-4 py-3 bg-zinc-950">
@@ -37,7 +37,12 @@ export const MobileHeader = ({
                 variant="ghost" 
                 size="icon" 
                 className="h-10 w-10 rounded-full hover:bg-amber-400/20 bg-amber-400/10 transition-all duration-200 active:scale-95 relative"
-                onClick={() => setNotificationsOpen(!notificationsOpen)}
+                onClick={() => {
+                  if (!notificationsOpen) {
+                    clearNotificationCount();
+                  }
+                  setNotificationsOpen(!notificationsOpen);
+                }}
               >
                 <Bell className="h-5 w-5 text-amber-400" />
                 {unreadCount > 0 && (

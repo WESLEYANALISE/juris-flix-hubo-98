@@ -108,6 +108,11 @@ export const useNewsNotifications = () => {
     setUnreadCount(0);
   };
 
+  const clearAllNotifications = () => {
+    setUnreadCount(0);
+    setRecentNews([]);
+  };
+
   return {
     unreadCount,
     recentNews,
@@ -115,6 +120,7 @@ export const useNewsNotifications = () => {
     error,
     markAsRead,
     markAllAsRead,
-    clearNotificationCount
+    clearNotificationCount,
+    clearAllNotifications
   };
 };

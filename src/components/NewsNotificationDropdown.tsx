@@ -13,25 +13,24 @@ interface NewsNotificationDropdownProps {
 }
 
 export const NewsNotificationDropdown = ({ isOpen, onClose }: NewsNotificationDropdownProps) => {
-  const { recentNews, loading, markAsRead, markAllAsRead, clearNotificationCount } = useNewsNotifications();
+  const { recentNews, loading, markAsRead, markAllAsRead, clearAllNotifications } = useNewsNotifications();
   const { setCurrentFunction } = useNavigation();
 
-  // Zerar contador quando abrir o dropdown
-  React.useEffect(() => {
-    if (isOpen) {
-      clearNotificationCount();
-    }
-  }, [isOpen, clearNotificationCount]);
+  // Limpar tudo quando fechar o dropdown
+  const handleClose = () => {
+    clearAllNotifications();
+    onClose();
+  };
 
   const handleNewsClick = (newsId: number) => {
     markAsRead(newsId);
     setCurrentFunction('Noticias  Comentadas');
-    onClose();
+    handleClose();
   };
 
   const handleMarkAllAsRead = () => {
     markAllAsRead();
-    onClose();
+    handleClose();
   };
 
   if (!isOpen) return null;
@@ -41,7 +40,7 @@ export const NewsNotificationDropdown = ({ isOpen, onClose }: NewsNotificationDr
       {/* Overlay */}
       <div 
         className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={handleClose}
       />
       
       {/* Dropdown */}
@@ -70,7 +69,7 @@ export const NewsNotificationDropdown = ({ isOpen, onClose }: NewsNotificationDr
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={onClose}
+                  onClick={handleClose}
                   className="h-8 w-8"
                 >
                   <X className="h-4 w-4" />
@@ -154,7 +153,7 @@ export const NewsNotificationDropdown = ({ isOpen, onClose }: NewsNotificationDr
                   size="sm"
                   onClick={() => {
                     setCurrentFunction('Noticias  Comentadas');
-                    onClose();
+                    handleClose();
                   }}
                   className="w-full"
                 >
