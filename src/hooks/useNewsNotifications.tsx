@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface NewsAudio {
-  id: string;
-  titulo: string;
+  id: number;
+  Titulo: string | null;
   capa: string | null;
-  created_at: string;
+  data: string | null;
 }
 
 export const useNewsNotifications = () => {
@@ -22,8 +22,8 @@ export const useNewsNotifications = () => {
         // Buscar últimas notícias
         const { data: news, error: newsError } = await supabase
           .from('NOTICIAS-AUDIO')
-          .select('id, titulo, capa, created_at')
-          .order('created_at', { ascending: false })
+          .select('id, Titulo, capa, data')
+          .order('id', { ascending: false })
           .limit(10);
 
         if (newsError) throw newsError;
@@ -70,14 +70,14 @@ export const useNewsNotifications = () => {
     };
   }, []);
 
-  const markAsRead = async (newsId: string) => {
+  const markAsRead = async (newsId: number) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       await supabase.rpc('mark_news_as_read', {
         user_uuid: user.id,
-        news_uuid: newsId
+        news_uuid: newsId.toString()
       });
 
       setUnreadCount(prev => Math.max(0, prev - 1));
@@ -94,7 +94,7 @@ export const useNewsNotifications = () => {
       for (const news of recentNews) {
         await supabase.rpc('mark_news_as_read', {
           user_uuid: user.id,
-          news_uuid: news.id
+          news_uuid: news.id.toString()
         });
       }
 

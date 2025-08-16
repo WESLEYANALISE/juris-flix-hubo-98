@@ -14,7 +14,7 @@ export const NewsNotificationDropdown = ({ isOpen, onClose }: NewsNotificationDr
   const { recentNews, loading, markAsRead, markAllAsRead } = useNewsNotifications();
   const { setCurrentFunction } = useNavigation();
 
-  const handleNewsClick = (newsId: string) => {
+  const handleNewsClick = (newsId: number) => {
     markAsRead(newsId);
     setCurrentFunction('NoticiasJuridicas');
     onClose();
@@ -101,7 +101,7 @@ export const NewsNotificationDropdown = ({ isOpen, onClose }: NewsNotificationDr
                         {news.capa ? (
                           <img
                             src={news.capa}
-                            alt={news.titulo}
+                            alt={news.Titulo || 'Notícia'}
                             className="w-full h-full object-cover"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
@@ -124,16 +124,11 @@ export const NewsNotificationDropdown = ({ isOpen, onClose }: NewsNotificationDr
                       {/* Conteúdo da notícia */}
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-sm line-clamp-2 text-foreground mb-1">
-                          {news.titulo}
+                          {news.Titulo || 'Notícia sem título'}
                         </h4>
                         <p className="text-xs text-muted-foreground flex items-center gap-1">
                           <Clock className="h-3 w-3" />
-                          {new Date(news.created_at).toLocaleDateString('pt-BR', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
+                          {news.data || 'Data não disponível'}
                         </p>
                       </div>
                     </button>
