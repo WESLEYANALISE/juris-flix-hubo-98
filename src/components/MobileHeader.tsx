@@ -1,0 +1,64 @@
+
+import { Scale, Search, Bell, Menu } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import { MobileSidebar } from './MobileSidebar';
+import { NewsNotificationDropdown } from './NewsNotificationDropdown';
+import { useNewsNotifications } from '@/hooks/useNewsNotifications';
+interface MobileHeaderProps {
+  sidebarOpen: boolean;
+  setSidebarOpen: (open: boolean) => void;
+}
+export const MobileHeader = ({
+  sidebarOpen,
+  setSidebarOpen
+}: MobileHeaderProps) => {
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const { unreadCount } = useNewsNotifications();
+  return <>
+      <header className="fixed top-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/20 safe-area-pt">
+        <div className="px-4 py-3 bg-zinc-950">
+          <div className="flex items-center justify-between">
+            {/* Logo and Title */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
+                <img src="https://imgur.com/zlvHIAs.png" alt="Direito Premium" className="w-full h-full object-contain" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold gradient-text">Direito Premium</h1>
+                <p className="text-xs text-muted-foreground">Sua plataforma jurídica</p>
+              </div>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2">
+              {/* Notification Button */}
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-10 w-10 rounded-full hover:bg-amber-400/20 bg-amber-400/10 transition-all duration-200 active:scale-95 relative"
+                onClick={() => setNotificationsOpen(!notificationsOpen)}
+              >
+                <Bell className="h-5 w-5 text-amber-400" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 flex items-center justify-center text-white text-xs font-bold min-w-[20px]">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+              </Button>
+
+              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-amber-400/20 bg-amber-400/10 transition-all duration-200 active:scale-95" onClick={() => setSidebarOpen(true)}>
+                <Menu className={`h-5 w-5 text-amber-400 transition-transform duration-200 ${sidebarOpen ? 'rotate-90' : 'rotate-0'}`} />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <MobileSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <NewsNotificationDropdown 
+        isOpen={notificationsOpen} 
+        onClose={() => setNotificationsOpen(false)} 
+      />
+    </>;
+};
