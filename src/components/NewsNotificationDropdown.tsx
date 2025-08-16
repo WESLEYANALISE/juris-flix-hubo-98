@@ -1,3 +1,4 @@
+import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useNewsNotifications } from '@/hooks/useNewsNotifications';
@@ -8,11 +9,19 @@ import { cn } from '@/lib/utils';
 interface NewsNotificationDropdownProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpen?: () => void;
 }
 
 export const NewsNotificationDropdown = ({ isOpen, onClose }: NewsNotificationDropdownProps) => {
   const { recentNews, loading, markAsRead, markAllAsRead } = useNewsNotifications();
   const { setCurrentFunction } = useNavigation();
+
+  // Marcar todas como lidas quando abrir o dropdown
+  React.useEffect(() => {
+    if (isOpen && recentNews.length > 0) {
+      markAllAsRead();
+    }
+  }, [isOpen, recentNews.length, markAllAsRead]);
 
   const handleNewsClick = (newsId: number) => {
     markAsRead(newsId);
